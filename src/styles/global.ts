@@ -5,7 +5,7 @@ export const GlobalStyle = createGlobalStyle`
         --background: #F0F2F5;
         --text: #969CB3;
         --title: #363F5F;
-        --shape:  #FFFFFF;
+        --shape: #FFFFFF;
         --red: #E62E4D;
         --green: #33CC95 ;
         --blue: #5429CC;
@@ -26,7 +26,7 @@ export const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
     body{
-        background: var(----background);
+        background: var(--background);
         -webkit-font-smoothing: antialiased;
     }
     border-style, input, textarea, button{
