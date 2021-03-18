@@ -45,4 +45,28 @@ export const GlobalStyle = createGlobalStyle`
         cursor: not-allowed;
         opacity: 0.6;
     }
+
+    .react-modal-overlay{
+        background: rgba(0,0,0,0.5);
+        position: fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .react-modal-content{
+        width:100%;
+        max-width:576px;
+
+        position: relative;
+        background: var(--background);
+        padding: 3rem;
+
+        border-radius: 0.25rem;
+
+    }
 `;
