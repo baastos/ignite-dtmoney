@@ -1,11 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { Container } from "./styles";
 
-export function TransactionsTable() {
-    useEffect(() => {
-        api.get('transactions').then(response => console.log(response.data));
+interface TransactionProps {
+    id: number;
+    title: string;
+    amount: number;
+    type: string;
+    category: string;
+    createdAt: string;
+    formattedValue: string;
+    formattedDate: string;
+}
 
+export function TransactionsTable() {
+    const [transactions, setTransactions] = useState<TransactionProps[]>([]);
+
+    useEffect(() => {
+        api.get('transactions').then(response => {
+            const apiTransactions: TransactionProps[] = response.data.transactions;
+
+            const formattedTransactions = apiTransactions.map(transaction => ({
+                ...transaction,
+                formattedValue: new Intl.NumberFormat('pt-BR', {
+                    currency: 'BRL',
+                    style: 'currency'
+                }).format(transaction.amount),
+
+                formattedDate: new Intl.DateTimeFormat('pt-BR').format(new Date(transaction.createdAt))
+            }))
+            setTransactions(formattedTransactions);
+        })
     }, [])
     return (
         <Container>
@@ -19,19 +44,17 @@ export function TransactionsTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Desenvolvimento site</td>
-                        <td className="deposit">R$12.000</td>
-                        <td>Freela</td>
-                        <td>16/03/2021</td>
-                    </tr>
+                    {transactions.map(transaction => (
+                        <tr key={transaction.id}>
+                            <td>{transaction.title}</td>
+                            <td className={transaction.type}>
+                                {transaction.type === 'withdraw' && '-'} {transaction.formattedValue}
+                            </td>
+                            <td>{transaction.category}</td>
+                            <td>{transaction.formattedDate}</td>
+                        </tr>
+                    ))}
 
-                    <tr>
-                        <td>Aluguel</td>
-                        <td className="withdraw">- R$1.100</td>
-                        <td>Despesas</td>
-                        <td>05/03/2021</td>
-                    </tr>
                 </tbody>
             </table>
         </Container>
