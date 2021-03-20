@@ -1,37 +1,9 @@
-import { useEffect, useState } from "react";
-import { api } from "../../services/api";
+import { useTransactions } from "../../hooks/useTransactions";
 import { Container } from "./styles";
 
-interface TransactionProps {
-    id: number;
-    title: string;
-    amount: number;
-    type: string;
-    category: string;
-    createdAt: string;
-    formattedValue: string;
-    formattedDate: string;
-}
-
 export function TransactionsTable() {
-    const [transactions, setTransactions] = useState<TransactionProps[]>([]);
+    const { transactions } = useTransactions()
 
-    useEffect(() => {
-        api.get('transactions').then(response => {
-            const apiTransactions: TransactionProps[] = response.data.transactions;
-
-            const formattedTransactions = apiTransactions.map(transaction => ({
-                ...transaction,
-                formattedValue: new Intl.NumberFormat('pt-BR', {
-                    currency: 'BRL',
-                    style: 'currency'
-                }).format(transaction.amount),
-
-                formattedDate: new Intl.DateTimeFormat('pt-BR').format(new Date(transaction.createdAt))
-            }))
-            setTransactions(formattedTransactions);
-        })
-    }, [])
     return (
         <Container>
             <table>
